@@ -5,10 +5,16 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "bs4>=0.0.2",
     "dotenv>=0.9.9",
     "langchain>=0.3.26",
+    "langchain-chroma>=0.2.5",
+    "langchain-community>=0.3.27",
     "langchain-core>=0.3.69",
     "langchain-google-genai>=2.1.8",
     "langchain-tavily>=0.2.10",
     "langgraph>=0.5.3",
+    "nest-asyncio>=1.6.0",
+    "pytest>=8.4.1",
+    "tiktoken>=0.9.0",
 ]
