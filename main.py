@@ -1,47 +1,47 @@
-from langgraph.graph import END, MessageGraph
-from tool_executor import execute_tools
-from chains import first_responder, revisor
+from langgraph.graph import END, StateGraph
 from dotenv import load_dotenv
-from langchain_core.messages import AnyMessage, HumanMessage, AIMessage
-from typing import List
+from langchain_core.messages import HumanMessage
+from typing import TypedDict, Annotated
+import operator
+from langchain_core.messages import AnyMessage
+from nodes import tool_node, reasoning_node, output
 
 load_dotenv()
-FIRST_RESPONDER = "first_responder"
-REVISOR = "revisor"
-TOOL_EXECUTOR = "tool_executor"
-MAX_REVISION = 3
+REASONING = "Reasoning_agent"
+TOOL = "Tool_node"
+OUTPUT = "Output_node"
 
 
-def should_continue(state: List[AnyMessage]):
-    tool_call_count = sum(
-        1 for msg in state if isinstance(msg, AIMessage) and msg.tool_calls
-    )
-    if tool_call_count < MAX_REVISION:
-        return TOOL_EXECUTOR
+class GraphState(TypedDict):
+    messages: Annotated[list[AnyMessage], operator.add]
+
+
+def should_continue(state: GraphState):
+    if state["messages"][-1].tool_calls:
+        print("======Tool is called======")
+        return TOOL
     else:
-        return END
+        return OUTPUT
 
 
-graph = MessageGraph()
+graph = StateGraph(GraphState)
 
-graph.add_node(FIRST_RESPONDER, first_responder)
-graph.set_entry_point(FIRST_RESPONDER)
+graph.add_node(REASONING, reasoning_node)
+graph.set_entry_point(REASONING)
+graph.add_node(TOOL, tool_node)
+graph.add_node(OUTPUT, output)
 
-graph.add_node(TOOL_EXECUTOR, execute_tools)
-graph.add_edge(FIRST_RESPONDER, TOOL_EXECUTOR)
-
-graph.add_node(REVISOR, revisor)
-graph.add_edge(TOOL_EXECUTOR, REVISOR)
-
-graph.add_conditional_edges(
-    REVISOR, should_continue, {TOOL_EXECUTOR: TOOL_EXECUTOR, END: END}
-)
+graph.add_conditional_edges(REASONING, should_continue, {TOOL: TOOL, OUTPUT: OUTPUT})
+graph.add_edge(TOOL, REASONING)
+graph.add_edge(OUTPUT, END)
 
 app = graph.compile()
 app.get_graph().draw_mermaid_png(output_file_path="graph.png")
 
 if __name__ == "__main__":
-    query = "How to take care of a cat with CKD."
-    print("start Reflexion agent.")
-    res = app.invoke([HumanMessage(content=query)])
-    print(res[-1].tool_calls[0]["args"]["answer"])
+    query = "Who are you?"
+    print("start ReAct agent.")
+    res = app.invoke({"messages": [HumanMessage(content=query)]})
+    print("======Final Answer======")
+    print(res["messages"][-1])
+
