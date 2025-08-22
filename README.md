@@ -1,2 +1,2 @@
 # langgraph-course
-Langgraph version of AI Agent.
+Test Langgraph Persistence.
