@@ -7,15 +7,10 @@ from chains.entry_point_chain import entry_point_chain
 from langgraph.graph import StateGraph, END
 from models.state import GraphState
 
-#######################################
-#solution to solve asyncio issue
-
-#########################################
-
 RETRIEVE = "Retrieve"
 GRADE_DOCUMENT = "Grade_document"
 WEB_SEARCH = "Web_research"
-ANSWER = "Generate"
+ANSWER = "Generate_Answer"
 ANSWER_GRADER = "Answer_grader"
 
 
