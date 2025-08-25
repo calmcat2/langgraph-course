@@ -14,7 +14,7 @@ class GradeAnswer(BaseModel):
     )
 
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro").with_structured_output(GradeAnswer)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash").with_structured_output(GradeAnswer)
 system = """You are a grader assessing relevance of a retrieved document to a user question. \n 
     If the document contains keyword(s) or semantic meaning related to the question, grade it as relevant. \n
     Give a binary score 'true' or 'false' to indicate whether the document is relevant to the question."""
@@ -27,4 +27,4 @@ prompt = ChatPromptTemplate.from_messages(
         ),
     ]
 )
-retrieval_grader = prompt | llm
+retrieval_grader_chain = prompt | llm

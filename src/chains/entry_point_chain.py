@@ -1,5 +1,4 @@
 from dotenv import load_dotenv
-from langchain_core.output_parsers.string import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel, Field
@@ -12,7 +11,7 @@ class AnswerSchema(BaseModel):
         description="decision on choice of 'web-search' or 'retrieve'"
     )
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro").with_structured_output(AnswerSchema)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash").with_structured_output(AnswerSchema)
 system = """You are asked about a question and need to decide whether to search in the vectorstore or online.
 The vectorstore has information about best practices for Tavily Crawl, Extract and Search.
 If the question is not relavent to the content in the vectorstore then return 'web-search'.

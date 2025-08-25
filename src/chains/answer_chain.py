@@ -5,6 +5,6 @@ from langchain import hub
 
 load_dotenv()
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro")
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 prompt = hub.pull("rlm/rag-prompt")
-generation_chain = prompt | llm | StrOutputParser()
+answer_chain = prompt | llm | StrOutputParser()

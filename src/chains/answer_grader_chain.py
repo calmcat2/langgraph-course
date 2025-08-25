@@ -14,16 +14,16 @@ class GradeAnswer(BaseModel):
     )
 
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro").with_structured_output(GradeAnswer)
-system = """You are a grader assessing whether an LLM generation provides a good answer to the question. \n 
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash").with_structured_output(GradeAnswer)
+system = """You are a grader assessing whether an LLM answer provides a good answer to the question. \n 
      Give a binary score 'true' or 'false'. True means that the answer quality is good for the question."""
 prompt = ChatPromptTemplate.from_messages(
     [
         ("system", system),
         (
             "human",
-            "User Question: \n\n {question} \n\n LLM Generation: {generation}",
+            "User Question: \n\n {question} \n\n LLM Generation: {answer}",
         ),
     ]
 )
-answer_grader = prompt | llm
+answer_grader_chain = prompt | llm

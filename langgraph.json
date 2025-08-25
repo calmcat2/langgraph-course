@@ -1,0 +1,15 @@
+{
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "RAG-workflow": {
+      "path": "main:app",
+      "description": "Main workflow with retrieval, grading, generation, and web search",
+      "interrupt_before": [],
+      "interrupt_after": []
+    }
+  },
+  "env": ".env",
+  "python_version": "3.11"
+}

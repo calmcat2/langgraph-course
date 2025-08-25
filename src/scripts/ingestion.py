@@ -18,7 +18,7 @@ embeddings = GoogleGenerativeAIEmbeddings(model="gemini-embedding-001")
 vectorstore = Chroma(
     collection_name="Langgraph_RAG",
     embedding_function=embeddings,
-    persist_directory="./chroma_langgraph_db",
+    persist_directory="./data/chroma_langgraph_db",
 )
 
 

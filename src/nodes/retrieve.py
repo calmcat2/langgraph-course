@@ -1,9 +1,9 @@
-from graph.state import GraphState
-from ingestion import vectorstore
+from models.state import GraphState
+from scripts.ingestion import vectorstore
 
 
 def retrieve(state: GraphState):
-    print("---RETRIEVING---")
+    print("---Retrieving answer from the knowledge base---")
     retriever = vectorstore.as_retriever()
     question = state["question"]
     documents = retriever.invoke(question)
@@ -12,4 +12,4 @@ def retrieve(state: GraphState):
 
 if __name__ == "__main__":
     query = "What is tavily crawl best practice"
-    print(retriever({"question": query}))
+    print(retrieve({"question": query}))

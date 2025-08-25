@@ -1,10 +1,10 @@
-from graph.chains.retrieval_grader import retrieval_grader
-from graph.state import GraphState
+from chains.retrieval_grader_chain import retrieval_grader_chain
+from models.state import GraphState
 from typing import Dict
 
 
 def doc_grader(state: GraphState) -> Dict:
-    print("---GRADING---")
+    print("---Grading the RAG content---")
     question = state["question"]
     documents = state["documents"]
 
@@ -12,7 +12,7 @@ def doc_grader(state: GraphState) -> Dict:
     web_search = False
     for doc in documents:
         print("Grading document...")
-        grade = retrieval_grader.invoke({"question": question, "documents": [doc]})
+        grade = retrieval_grader_chain.invoke({"question": question, "documents": [doc]})
         if grade.binary_score:
             print("- Pass")
             filtered_doc.append(doc)

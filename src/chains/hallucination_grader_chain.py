@@ -14,16 +14,16 @@ class GradeHallucinations(BaseModel):
     )
 
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro").with_structured_output(GradeHallucinations)
-system = """You are a grader assessing whether an LLM generation is grounded in / supported by a set of retrieved facts. \n 
-     Give a binary score 'true' or 'false'. 'true' means that the answer is grounded in / supported by the set of facts."""
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash").with_structured_output(GradeHallucinations)
+system = """You are a grader assessing whether an LLM answer is grounded in / supported by a set of retrieved facts. \n 
+     Give a binary score 'true' or 'false'. 'false' means that the answer is grounded in / supported by the set of facts."""
 prompt = ChatPromptTemplate.from_messages(
     [
         ("system", system),
         (
             "human",
-            "Generated Content: \n\n {generation}\n\n Context: {documents}",
+            "Generated Content: \n\n {answer}\n\n Context: {documents}",
         ),
     ]
 )
-halluciation_grader = prompt | llm
+halluciation_grader_chain = prompt | llm
